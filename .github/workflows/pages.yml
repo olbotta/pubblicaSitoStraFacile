@@ -1,0 +1,31 @@
+name: Deploy to GitHub Pages
+
+# When to run: on every push to the main branch
+on:
+  push:
+    branches: [main]
+
+# What the workflow is allowed to do
+permissions:
+  contents: read   # read the repository files
+  pages: write     # publish to GitHub Pages
+  id-token: write  # prove to Pages that this deploy comes from this repo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest   # a fresh virtual machine provided by GitHub
+    environment:             # Pages requires deploying to this environment
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}  # link shown in the Actions tab
+    steps:
+      # 1. Copy the repository files onto the virtual machine
+      - uses: actions/checkout@v4
+
+      # 2. Pack the site folder (here: the whole repo) into an archive for Pages
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      # 3. Publish that archive on GitHub Pages
+      - id: deployment
+        uses: actions/deploy-pages@v4
