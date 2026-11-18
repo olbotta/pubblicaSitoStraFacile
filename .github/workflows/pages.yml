@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest   # a fresh virtual machine provided by GitHub
     environment:             # Pages requires deploying to this environment
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}  # link shown in the Actions tab
     steps:
       # 1. Copy the repository files onto the virtual machine
       - uses: actions/checkout@v4
@@ -27,5 +26,4 @@ jobs:
           path: .
 
       # 3. Publish that archive on GitHub Pages
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v4
